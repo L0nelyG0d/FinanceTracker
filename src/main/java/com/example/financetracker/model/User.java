@@ -21,6 +21,7 @@ public class User {
     @Column(name = "default_currency")
     private String defaultCurrency;
 
+    @ElementCollection
     @CollectionTable(name = "preferred_categories", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name = "category")
     private List<String> preferredCategories;
