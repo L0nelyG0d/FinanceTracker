@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 
 public interface ExpensesRepository extends JpaRepository<Expenses, Long> {
-    Expenses findbyCategory(String category);
+    Expenses findByCategory(String category);
 }

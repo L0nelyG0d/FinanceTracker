@@ -79,4 +79,17 @@ public class Expenses {
     public void setPaymentMethod(String paymentMethod) {
         this.paymentMethod = paymentMethod;
     }
+
+    @Override
+    public String toString() {
+        return "Expenses{" +
+                "id=" + id +
+                ", amount=" + amount +
+                ", category='" + category + '\'' +
+                ", date=" + date +
+                ", description='" + description + '\'' +
+                ", paymentMethod='" + paymentMethod + '\'' +
+                '}';
+    }
+
 }
