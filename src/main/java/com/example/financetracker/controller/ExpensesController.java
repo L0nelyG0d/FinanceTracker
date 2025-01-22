@@ -6,44 +6,41 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/expenses")
 public class ExpensesController {
 
-    private final ExpensesService expenseService;
+    private final ExpensesService expensesService;
 
-    ExpensesController(ExpensesService expenseService) {
-        this.expenseService = expenseService;
+    public ExpensesController(ExpensesService expensesService) {
+        this.expensesService = expensesService;
     }
 
     @GetMapping
-    public ResponseEntity<List<Expenses>> getAllExpenses() {
-        List<Expenses> expenses = expenseService.getAllExpenses();
-
-        return new ResponseEntity<>(expenses, HttpStatus.OK);
+    public List<Expenses> getAllExpenses() {
+        return expensesService.getAllExpenses();
     }
 
-    @GetMapping("/id")
+    @GetMapping("/{id}")
     public ResponseEntity<Expenses> getExpenseById(@PathVariable Long id) {
-        Optional<Expenses> expense  = expenseService.getExpensesById(id);
-
+        Optional<Expenses> expense = expensesService.getExpensesById(id);
         return expense.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
     public ResponseEntity<Expenses> createExpense(@RequestBody Expenses expense) {
-        Expenses createdExpense = expenseService.addExpenses(expense);
-        return ResponseEntity.ok(createdExpense);
+        Expenses createdExpense = expensesService.addExpenses(expense);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdExpense);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteExpenseById(@PathVariable Long id) {
-        boolean isDeleted = expenseService.deleteExpensesById(id);
+        boolean isDeleted = expensesService.deleteExpensesById(id);
         return isDeleted ? ResponseEntity.noContent().build()
                 : ResponseEntity.notFound().build();
     }
-
 }

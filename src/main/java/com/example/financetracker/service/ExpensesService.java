@@ -9,23 +9,25 @@ import java.util.Optional;
 
 @Service
 public class ExpensesService {
-    private ExpensesRepository expensesRepository;
+
+    private final ExpensesRepository expensesRepository;
 
     public ExpensesService(ExpensesRepository expensesRepository) {
         this.expensesRepository = expensesRepository;
     }
 
-    public Expenses addExpenses(Expenses expenses) {
-        return expensesRepository.save(expenses);
+    public List<Expenses> getAllExpenses() {
+        return expensesRepository.findAll();
     }
 
     public Optional<Expenses> getExpensesById(Long id) {
         return expensesRepository.findById(id);
     }
 
-    public List<Expenses> getAllExpenses() {
-        return expensesRepository.findAll();
+    public Expenses addExpenses(Expenses expense) {
+        return expensesRepository.save(expense);
     }
+
     public boolean deleteExpensesById(Long id) {
         if (expensesRepository.existsById(id)) {
             expensesRepository.deleteById(id);
