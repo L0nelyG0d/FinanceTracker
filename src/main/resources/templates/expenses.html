@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Expenses Overview</title>
+  <link rel="stylesheet" type="text/css" href="/css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    .overview-container {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 60%;
+      margin: 20px 0;
+    }
+
+    table, th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+    }
+
+    th {
+      background-color: #f2f2f2;
+      text-align: left;
+    }
+
+    td {
+      text-align: left;
+    }
+
+    .chart-container {
+      width: 30%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  </style>
+</head>
+<body>
+<h1 style="text-align: center;">Expenses Overview</h1>
+
+<!-- Main Section with Table on the Left and Chart on the Right -->
+<div class="overview-container">
+  <!-- Expenses Table Section -->
+  <div>
+    <h2>Expenses List</h2>
+    <table>
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Amount</th>
+        <th>Description</th>
+        <th>Date</th>
+        <th>Category</th>
+        <th>Payment Method</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="expense : ${expenses}">
+        <td th:text="${expense.id}"></td>
+        <td th:text="${expense.amount}"></td>
+        <td th:text="${expense.description}"></td>
+        <td th:text="${expense.date}"></td>
+        <td th:text="${expense.category}"></td>
+        <td th:text="${expense.paymentMethod}"></td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Doughnut Chart Section -->
+  <div class="chart-container">
+    <div>
+      <canvas id="expenseProgressChart"></canvas>
+      <div style="text-align: center; margin-top: 10px;">
+        <h2>Total Expenses: <span th:text="${totalExpenses}"></span> USD</h2>
+        <h3>Limit: 20,000 USD</h3>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const totalExpenses = /*[[${totalExpenses}]]*/ 0; // This will be replaced by Thymeleaf
+    const limit = 20000;
+
+    const ctx = document.getElementById('expenseProgressChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Spent', 'Remaining'],
+        datasets: [{
+          data: [totalExpenses, Math.max(0, limit - totalExpenses)],
+          backgroundColor: ['#FF6384', '#DDDDDD'], // Colors for "Spent" and "Remaining"
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false, // Allows precise control over height/width
+        cutout: '70%', // Adjusts the inner radius of the doughnut
+        plugins: {
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                return `${context.label}: ${context.raw} USD`;
+              }
+            }
+          }
+        }
+      }
+    });
+  });
+</script>
+</body>
+</html>
