@@ -13,14 +13,14 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/expenses", "/expenses/add", "/expenses/getallexpenses").authenticated() // Protect these endpoints
-                        .anyRequest().permitAll() // Allow access to other endpoints
+                        .anyRequest().permitAll()
                 )
                 .formLogin(form -> form
-                        .defaultSuccessUrl("/expenses", true) // Redirect to /expenses after login
+                        .defaultSuccessUrl("/expenses", true)
                         .permitAll()
                 )
                 .logout(logout -> logout
-                        .logoutSuccessUrl("/login?logout") // Redirect to /login after logout
+                        .logoutSuccessUrl("/login?logout")
                         .permitAll()
                 );
         return http.build();

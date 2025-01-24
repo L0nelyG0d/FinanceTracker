@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Add Expense</title>
-    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <link rel="stylesheet" type="text/css" href="/css/styles.css">
 </head>
 <body>
 <h1>Add New Expense</h1>
@@ -25,6 +25,14 @@
     <button type="submit">Add Expense</button>
 </form>
 
+    <button id="btnBack" class="btn">Go back to Main</button>
+
+    <script>
+        document.getElementById("btnBack").addEventListener("click", function(){
+            window.location.href = "/expenses/getallexpenses"
+        });
+
+    </script>
 <script src="/js/scripts.js"></script>
 </body>
 </html>

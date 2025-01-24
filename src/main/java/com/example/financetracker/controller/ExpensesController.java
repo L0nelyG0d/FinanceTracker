@@ -8,11 +8,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/expenses")
@@ -25,6 +22,7 @@ public class ExpensesController {
     }
 
     @GetMapping
+    @ResponseBody
     public List<Expenses> getAllExpenses() {
         return expensesService.getAllExpenses();
     }
@@ -37,15 +35,13 @@ public class ExpensesController {
         model.addAttribute("expenses", expenses);
         model.addAttribute("totalExpenses", totalExpenses); // Add total expenses to the model
 
-        return "expenses";
+        return "expenses1"; // Ensure this maps to the Thymeleaf template correctly
     }
-
 
     @GetMapping("/add")
     public String getAddExpenseForm(Model model) {
         model.addAttribute("expense", new Expenses());
-
-        return "add-expense"; // This maps to add-expense.html in templates
+        return "add-expense";
     }
 
     @PostMapping("/add")
@@ -64,21 +60,12 @@ public class ExpensesController {
         expense.setPaymentMethod(paymentMethod);
 
         expensesService.addExpenses(expense);
-        return "redirect:/expenses/getallexpenses"; // Redirect to the list of expenses after submission
+        return "redirect:/expenses/getallexpenses";
     }
-    @GetMapping("/{id}")
-    public ResponseEntity<Expenses> getExpenseById(@PathVariable Long id) {
-        Optional<Expenses> expense = expensesService.getExpensesById(id);
-        return expense.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
-    }
-
-
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteExpenseById(@PathVariable Long id) {
         boolean isDeleted = expensesService.deleteExpensesById(id);
-        return isDeleted ? ResponseEntity.noContent().build()
-                : ResponseEntity.notFound().build();
+        return isDeleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
 }
